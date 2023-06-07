@@ -1,0 +1,7 @@
+{
+  "name": "booknote",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
