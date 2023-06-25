@@ -17,6 +17,18 @@ export class Tab1Page implements OnInit {
   rating: number = 1;
   title: string = '';
 
+  genreOptions: string[] = [
+    'all',
+    'history',
+    'fantasy',
+    'horror',
+    'thriller',
+    'nonfiction',
+    'comedy',
+    'drama',
+  ];
+  selectedGenre: string = 'all';
+
   constructor(
     private booksService: BooksService,
     private modalController: ModalController
@@ -62,7 +74,38 @@ export class Tab1Page implements OnInit {
     await modal.present();
   }
 
+  // Pravi bezveze niz od nula duzine rating-a, pa se na frontu to slika u zvezde
   getStars(rating: number): number[] {
     return Array(rating).fill(0);
+  }
+
+  // Filter po selektovanom zanru
+  filterBooks() {
+    if (this.selectedGenre != 'all') {
+      this.booksService.getBooks().subscribe((books) => {
+        this.books = books.filter((book) => book.genre === this.selectedGenre);
+      });
+    } else {
+      this.booksService.getBooks().subscribe((books) => {
+        this.books = books;
+      });
+    }
+  }
+
+  // Ciklicno kretanje kroz zanrove
+  selectPreviousGenre() {
+    const currentIndex = this.genreOptions.indexOf(this.selectedGenre);
+    const previousIndex =
+      currentIndex === 0 ? this.genreOptions.length - 1 : currentIndex - 1;
+    this.selectedGenre = this.genreOptions[previousIndex];
+    this.filterBooks();
+  }
+
+  selectNextGenre() {
+    const currentIndex = this.genreOptions.indexOf(this.selectedGenre);
+    const nextIndex =
+      currentIndex === this.genreOptions.length - 1 ? 0 : currentIndex + 1;
+    this.selectedGenre = this.genreOptions[nextIndex];
+    this.filterBooks();
   }
 }

@@ -1,4 +1,17 @@
 <ion-content [fullscreen]="true">
+  <div class="filter">
+    <ion-icon
+      name="arrow-back"
+      class="arrow-icon left"
+      (click)="selectPreviousGenre()"
+    ></ion-icon>
+    <p>{{ selectedGenre.charAt(0).toUpperCase() + selectedGenre.slice(1) }}</p>
+    <ion-icon
+      name="arrow-forward"
+      class="arrow-icon right"
+      (click)="selectNextGenre()"
+    ></ion-icon>
+  </div>
   <div class="container">
     <ion-grid>
       <ion-row>

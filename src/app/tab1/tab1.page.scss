@@ -1,3 +1,28 @@
+.filter {
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 40%;
+  position: relative;
+}
+
+.arrow-icon {
+  position: absolute;
+  font-size: 24px;
+  color: var(--ion-color-primary);
+}
+
+.arrow-icon.left {
+  left: 0;
+}
+
+.arrow-icon.right {
+  right: 0;
+}
+
 .container {
   padding: 5px;
 }
