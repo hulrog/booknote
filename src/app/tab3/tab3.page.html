@@ -1,6 +1,30 @@
 <ion-content [fullscreen]="true" class="ion-text-center">
   <div class="user-profile">
-    <h3>{{ userEmail }}</h3>
-    <ion-button (click)="logOut()" class="custom-button">Log Out</ion-button>
+    <div class="profile-info">
+      <ion-icon name="person-circle-outline" class="profile-icon"></ion-icon>
+      <h3 class="user-email">{{ userEmail }}</h3>
+    </div>
   </div>
+
+  <div class="statistics">
+    <table>
+      <thead>
+        <tr>
+          <th>Genre</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let genreItem of genreBreakdown">
+          <td>
+            {{ genreItem.genre.charAt(0).toUpperCase() +
+            genreItem.genre.slice(1) }}
+          </td>
+          <td>{{ genreItem.count }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ion-button (click)="logOut()" class="custom-button">Log Out</ion-button>
 </ion-content>
