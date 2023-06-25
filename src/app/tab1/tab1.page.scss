@@ -3,7 +3,6 @@
 }
 
 .book-card {
-  background-color: #6495ed;
   color: white;
   padding: 20px;
   text-align: center;
@@ -15,4 +14,32 @@
 
 ion-grid {
   margin-top: 50px;
+}
+
+.genre-history {
+  background-color: #a7a044;
+}
+
+.genre-fantasy {
+  background-color: #009137;
+}
+
+.genre-horror {
+  background-color: #3f1414;
+}
+
+.genre-thriller {
+  background-color: #9b6d9b;
+}
+
+.genre-nonfiction {
+  background-color: #2b2b2b;
+}
+
+.genre-drama {
+  background-color: #6d0c45;
+}
+
+.genre-comedy {
+  background-color: #8f5203;
 }
