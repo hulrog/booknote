@@ -29,13 +29,12 @@ export class BooksService {
   }
 
   addBook(author: string, title: string) {
-    const userId = this.authService.getUserId();
     let generatedId: string;
 
     return this.http
       .post<{ name: string }>(
-        `https://your-firebase-project.firebaseio.com/books.json?auth=${this.authService.getToken()}`,
-        { author, title, userId }
+        `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books.json?auth=${this.authService.getToken()}`,
+        { author, title }
       )
       .pipe(
         switchMap((resData) => {
@@ -56,48 +55,27 @@ export class BooksService {
   }
 
   getBooks() {
-    //     return this.http
-    //       .get<{ [key: string]: BookData }>(
-    //         `https://your-firebase-project.firebaseio.com/books.json?auth=${this.authService.getToken()}`
-    //       )
-    //       .pipe(
-    //         map((booksData) => {
-    //           const books: Book[] = [];
-
-    //           for (const key in booksData) {
-    //             books.push({
-    //               id: key,
-    //               author: booksData[key].author,
-    //               title: booksData[key].title,
-    //             });
-    //           }
-
-    //           return books;
-    //         }),
-    //         tap((books) => {
-    //           this._books.next(books);
-    //         })
-    //       );
-    //   }
-    const mockedBooks: Book[] = [
-      {
-        id: '1',
-        author: 'John Doe',
-        title: 'Sample Book 1',
-      },
-      {
-        id: '2',
-        author: 'Jane Smith',
-        title: 'Sample Book 2',
-      },
-      {
-        id: '3',
-        author: 'George R.R. Martin',
-        title: 'A Game of Thrones',
-      },
-    ];
-
-    this._books.next(mockedBooks);
-    return this.books;
+    return this.http
+      .get<{ [key: string]: BookData }>(
+        `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books.json?auth=${this.authService.getToken()}`
+      )
+      .pipe(
+        map((booksData) => {
+          const books: Book[] = [];
+          for (const key in booksData) {
+            books.push({
+              id: key,
+              author: booksData[key].author,
+              title: booksData[key].title,
+            });
+          }
+          return books;
+        }),
+        tap((books) => {
+          this._books.next(books);
+          console.log('service:');
+          console.log(books); // Check if the array is populated correctly
+        })
+      );
   }
 }

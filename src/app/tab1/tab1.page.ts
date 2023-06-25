@@ -26,14 +26,21 @@ export class Tab1Page implements OnInit {
   }
 
   addBook() {
-    this.booksService.addBook(this.author, this.title).subscribe();
-    this.author = '';
-    this.title = '';
+    this.booksService.addBook(this.author, this.title).subscribe(() => {
+      this.author = '';
+      this.title = '';
+    });
   }
 
   async openAddBookModal() {
     const modal = await this.modalController.create({
       component: AddBookModalComponent,
+    });
+
+    modal.onDidDismiss().then(() => {
+      this.booksService.getBooks().subscribe((books) => {
+        this.books = books;
+      });
     });
     await modal.present();
   }
