@@ -13,6 +13,8 @@ import { UpdateBookModalComponent } from '../update-book-modal/update-book-modal
 export class Tab1Page implements OnInit {
   books: Book[] = [];
   author: string = '';
+  genre: string = '';
+  rating: number = 1;
   title: string = '';
 
   constructor(
@@ -27,10 +29,13 @@ export class Tab1Page implements OnInit {
   }
 
   addBook() {
-    this.booksService.addBook(this.author, this.title).subscribe(() => {
-      this.author = '';
-      this.title = '';
-    });
+    this.booksService
+      .addBook(this.author, this.genre, this.rating, this.title)
+      .subscribe(() => {
+        this.author = '';
+        this.genre = '';
+        this.title = '';
+      });
   }
 
   async openAddBookModal() {

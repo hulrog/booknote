@@ -11,14 +11,6 @@
 
 <ion-content class="ion-text-center" padding>
   <ion-item>
-    <ion-label position="stacked">Author</ion-label>
-    <ion-input
-      [(ngModel)]="author"
-      placeholder="Enter author"
-      required
-    ></ion-input>
-  </ion-item>
-  <ion-item>
     <ion-label position="stacked">Title</ion-label>
     <ion-input
       [(ngModel)]="title"
@@ -26,6 +18,34 @@
       required
     ></ion-input>
   </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Author</ion-label>
+    <ion-input
+      [(ngModel)]="author"
+      placeholder="Enter author"
+      required
+    ></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Genre</ion-label>
+    <ion-select [(ngModel)]="genre">
+      <ion-select-option value="History">History</ion-select-option>
+      <ion-select-option value="Fantasy">Fantasy</ion-select-option>
+      <ion-select-option value="Horror">Horror</ion-select-option>
+      <ion-select-option value="Thriller">Thriller</ion-select-option>
+      <ion-select-option value="Nonfiction">Nonfiction</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div class="rating">
+    <ion-icon
+      *ngFor="let star of getStarsArray()"
+      [name]="starIconName(star)"
+      (click)="selectRating(star)"
+      class="star-icon"
+    ></ion-icon>
+  </div>
   <ion-button (click)="updateBook()" class="custom-button" shape="round"
     >Update Book</ion-button
   >

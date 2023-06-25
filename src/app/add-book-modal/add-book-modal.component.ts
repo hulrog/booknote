@@ -9,6 +9,8 @@ import { BooksService } from '../tab1/books.service';
 })
 export class AddBookModalComponent {
   author: string = '';
+  genre: string = '';
+  rating: number = 0;
   title: string = '';
 
   constructor(
@@ -21,8 +23,23 @@ export class AddBookModalComponent {
   }
 
   addBook() {
-    this.booksService.addBook(this.author, this.title).subscribe(() => {
-      this.dismissModal();
-    });
+    this.booksService
+      .addBook(this.author, this.genre, this.rating, this.title)
+      .subscribe(() => {
+        this.dismissModal();
+      });
+  }
+
+  // Funkcije za ocenu knjige
+  getStarsArray(): number[] {
+    return [1, 2, 3, 4, 5];
+  }
+
+  // Ako je manja od ratinga onda obojena - ako nije onda samo outline
+  starIconName(star: number): string {
+    return star <= this.rating ? 'star' : 'star-outline';
+  }
+  selectRating(rating: number): void {
+    this.rating = rating;
   }
 }

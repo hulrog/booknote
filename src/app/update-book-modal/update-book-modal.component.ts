@@ -11,6 +11,8 @@ import { Book } from '../tab1/book.model';
 export class UpdateBookModalComponent {
   @Input() book!: Book;
   author: string = '';
+  genre: string = '';
+  rating: number = 0;
   title: string = '';
 
   constructor(
@@ -21,6 +23,8 @@ export class UpdateBookModalComponent {
   ngOnInit() {
     // Kroz parametar dobija polja koja se prepopulisu
     this.author = this.book.author;
+    this.genre = this.book.genre;
+    this.rating = this.book.rating;
     this.title = this.book.title;
   }
 
@@ -30,7 +34,13 @@ export class UpdateBookModalComponent {
 
   updateBook() {
     this.booksService
-      .updateBook(this.book.id, this.author, this.title)
+      .updateBook(
+        this.book.id,
+        this.author,
+        this.genre,
+        this.rating,
+        this.title
+      )
       .subscribe(() => {
         this.dismissModal();
       });
@@ -40,5 +50,17 @@ export class UpdateBookModalComponent {
     this.booksService.deleteBook(this.book.id).subscribe(() => {
       this.dismissModal();
     });
+  }
+
+  // Iste funkcije kao u modalu za add
+  getStarsArray(): number[] {
+    return [1, 2, 3, 4, 5];
+  }
+
+  starIconName(star: number): string {
+    return star <= this.rating ? 'star' : 'star-outline';
+  }
+  selectRating(rating: number): void {
+    this.rating = rating;
   }
 }

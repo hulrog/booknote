@@ -6,6 +6,8 @@ import { AuthService } from '../auth/auth.service';
 
 interface BookData {
   author: string;
+  genre: string;
+  rating: number;
   title: string;
 }
 
@@ -22,19 +24,21 @@ export class BooksService {
 
   getBook(id: string): Book {
     return {
-      id: 'b2',
-      author: 'John Doe',
-      title: 'Sample Book',
+      id: 'neki-id-123',
+      genre: 'Fantasy',
+      rating: 5,
+      author: 'J.R.R Tolkien',
+      title: 'Lor of the Rings',
     };
   }
 
-  addBook(author: string, title: string) {
+  addBook(author: string, genre: string, rating: number, title: string) {
     let generatedId: string;
 
     return this.http
       .post<{ name: string }>(
         `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books.json?auth=${this.authService.getToken()}`,
-        { author, title }
+        { author, genre, rating, title }
       )
       .pipe(
         switchMap((resData) => {
@@ -47,6 +51,8 @@ export class BooksService {
             books.concat({
               id: generatedId,
               author,
+              genre,
+              rating,
               title,
             })
           );
@@ -66,6 +72,8 @@ export class BooksService {
             books.push({
               id: key,
               author: booksData[key].author,
+              genre: booksData[key].genre,
+              rating: booksData[key].rating,
               title: booksData[key].title,
             });
           }
@@ -73,14 +81,18 @@ export class BooksService {
         }),
         tap((books) => {
           this._books.next(books);
-          console.log('service:');
-          console.log(books); // Check if the array is populated correctly
         })
       );
   }
 
-  updateBook(id: string, author: string, title: string) {
-    const bookData: BookData = { author, title };
+  updateBook(
+    id: string,
+    author: string,
+    genre: string,
+    rating: number,
+    title: string
+  ) {
+    const bookData: BookData = { author, genre, rating, title };
 
     return this.http.put(
       `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books/${id}.json?auth=${this.authService.getToken()}`,
