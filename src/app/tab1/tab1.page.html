@@ -10,6 +10,13 @@
           >
             <h2>{{ book.title }}</h2>
             <p>By {{ book.author }}</p>
+            <div class="rating">
+              <ion-icon
+                *ngFor="let star of getStars(book.rating)"
+                name="star"
+                class="star-icon"
+              ></ion-icon>
+            </div>
           </div>
         </ion-col>
       </ion-row>

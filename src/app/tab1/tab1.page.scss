@@ -2,6 +2,10 @@
   padding: 5px;
 }
 
+ion-grid {
+  margin-top: 50px;
+}
+
 .book-card {
   color: white;
   padding: 20px;
@@ -10,36 +14,52 @@
   height: 250px;
   width: 160px;
   margin: 0 auto;
+  position: relative; // Da bi dao kontekst - da rating zna gde sa svojim position: absolute
 }
 
-ion-grid {
-  margin-top: 50px;
+.rating {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  position: absolute; // Apsolutna pozicija, ali u odnosu na svog roditelja (book-card)
+  //Dozvoljava namestanje sa bottom, top, right, left
+  bottom: 0; // Fiksira ga dole
+  left: 50%; // Centriranje
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 160px;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  box-sizing: border-box;
+}
+.star-icon {
+  font-size: 14px;
+  margin: 2px;
 }
 
 .genre-history {
-  background-color: #a7a044;
+  background-color: var(--color-history);
 }
 
 .genre-fantasy {
-  background-color: #009137;
+  background-color: var(--color-fantasy);
 }
 
 .genre-horror {
-  background-color: #3f1414;
+  background-color: var(--color-horror);
 }
 
 .genre-thriller {
-  background-color: #9b6d9b;
+  background-color: var(--color-thriller);
 }
 
 .genre-nonfiction {
-  background-color: #2b2b2b;
+  background-color: var(--color-nonfiction);
 }
 
 .genre-drama {
-  background-color: #6d0c45;
+  background-color: var(--color-drama);
 }
 
 .genre-comedy {
-  background-color: #8f5203;
+  background-color: var(--color-comedy);
 }

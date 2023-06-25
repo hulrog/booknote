@@ -28,16 +28,8 @@ export class Tab1Page implements OnInit {
     });
   }
 
-  addBook() {
-    this.booksService
-      .addBook(this.author, this.genre, this.rating, this.title)
-      .subscribe(() => {
-        this.author = '';
-        this.genre = '';
-        this.title = '';
-      });
-  }
-
+  // Funkcija za update -  ide u novu komponentu  gde se nalazi sama funkcija
+  // kad se dissmissuje updatuje listu knjiga
   async openAddBookModal() {
     const modal = await this.modalController.create({
       component: AddBookModalComponent,
@@ -51,6 +43,8 @@ export class Tab1Page implements OnInit {
     await modal.present();
   }
 
+  // Funkcija za update -  ide u novu komponentu gde se nalazi sama funkcija
+  // kad se dissmissuje updatuje listu knjiga
   async openUpdateBookModal(book: Book) {
     const modal = await this.modalController.create({
       component: UpdateBookModalComponent,
@@ -66,5 +60,9 @@ export class Tab1Page implements OnInit {
     });
 
     await modal.present();
+  }
+
+  getStars(rating: number): number[] {
+    return Array(rating).fill(0);
   }
 }
