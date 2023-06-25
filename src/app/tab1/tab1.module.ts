@@ -7,6 +7,7 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
 
 import { Tab1PageRoutingModule } from './tab1-routing.module';
 import { AddBookModalComponent } from '../add-book-modal/add-book-modal.component';
+import { UpdateBookModalComponent } from '../update-book-modal/update-book-modal.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { AddBookModalComponent } from '../add-book-modal/add-book-modal.componen
     ExploreContainerComponentModule,
     Tab1PageRoutingModule,
   ],
-  declarations: [Tab1Page, AddBookModalComponent],
+  declarations: [Tab1Page, AddBookModalComponent, UpdateBookModalComponent],
 })
 export class Tab1PageModule {}

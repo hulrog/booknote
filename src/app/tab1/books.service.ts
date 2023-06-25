@@ -78,4 +78,29 @@ export class BooksService {
         })
       );
   }
+
+  updateBook(id: string, author: string, title: string) {
+    const bookData: BookData = { author, title };
+
+    return this.http.put(
+      `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books/${id}.json?auth=${this.authService.getToken()}`,
+      bookData
+    );
+  }
+
+  deleteBook(id: string) {
+    return this.http
+      .delete(
+        `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books/${id}.json?auth=${this.authService.getToken()}`
+      )
+      .pipe(
+        switchMap(() => {
+          return this.books;
+        }),
+        take(1),
+        tap((books) => {
+          this._books.next(books.filter((book) => book.id !== id));
+        })
+      );
+  }
 }

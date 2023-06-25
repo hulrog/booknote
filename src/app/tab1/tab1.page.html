@@ -3,7 +3,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="6" *ngFor="let book of books">
-          <div class="book-card">
+          <div class="book-card" (click)="openUpdateBookModal(book)">
             <h2>{{ book.title }}</h2>
             <p>By {{ book.author }}</p>
           </div>
