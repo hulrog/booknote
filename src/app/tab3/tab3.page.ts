@@ -12,7 +12,7 @@ import { Book } from '../tab1/book.model';
 export class Tab3Page implements OnInit {
   genreBreakdown: { genre: string; count: number }[] = [];
   totalBooks: number = 0;
-  userEmail: string = '';
+  username: string = '';
 
   constructor(
     private authService: AuthService,
@@ -21,7 +21,7 @@ export class Tab3Page implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = this.authService.getUserEmail();
+    this.username = this.authService.getUsername();
     this.calculateBookStatistics();
   }
 

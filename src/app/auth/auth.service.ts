@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { tap } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs';
 import { User } from './user.model';
 
 export interface AuthResponseData {
@@ -15,9 +15,9 @@ export interface AuthResponseData {
 }
 
 export interface UserData {
-  username?: string;
   email: string;
   password: string;
+  username: string;
 }
 @Injectable({
   providedIn: 'root',
@@ -28,7 +28,7 @@ export class AuthService {
   private user: User;
   constructor(private http: HttpClient) {
     this.instanceId = Date.now();
-    this.user = new User('', '', '', null);
+    this.user = new User('', '', '', '', null);
     console.log(`Constructor activated! Instance ID: ${this.instanceId}`);
   }
 
@@ -38,10 +38,33 @@ export class AuthService {
 
   register(user: UserData) {
     this._isUserAuthenticated = true;
-    return this.http.post<AuthResponseData>(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.webAPIKey}`,
-      { email: user.email, password: user.password, returnSecureToken: true }
-    );
+    const { email, password, username } = user;
+    return this.http
+      .post<AuthResponseData>(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.webAPIKey}`,
+        { email, password, returnSecureToken: true }
+      )
+      .pipe(
+        switchMap((authResponse) => {
+          const userId = authResponse.localId;
+          const userData = {
+            email,
+            userId,
+            username,
+          };
+          return this.http
+            .put(
+              `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}.json?auth=${authResponse.idToken}`,
+              userData
+            )
+            .pipe(
+              switchMap(() => {
+                //loguje usera automatski nakon registracije
+                return this.logIn(user);
+              })
+            );
+        })
+      );
   }
 
   logIn(user: UserData) {
@@ -52,19 +75,32 @@ export class AuthService {
         { email: user.email, password: user.password, returnSecureToken: true }
       )
       .pipe(
-        tap((userData) => {
-          // token istice za
-          // sadasnje vreme u miliseknduma +
-          // istek (po defaultu u firebasu 3600 sekundi * 1000 u miliseknduma)
-          // + operator konvertuje string u broj jer je "3600" string
-          const expirationTime = new Date(
-            new Date().getTime() + +userData.expires * 1000
+        switchMap((authResponse) => {
+          const userId = authResponse.localId;
+          const getUserUrl = `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/users/${userId}.json`;
+
+          return this.http.get<{ username: string }>(getUserUrl).pipe(
+            map((userData) => {
+              const expirationTime = new Date(
+                new Date().getTime() + +authResponse.expires * 1000
+              );
+              return {
+                userId: authResponse.localId,
+                email: authResponse.email,
+                username: userData.username,
+                token: authResponse.idToken,
+                expirationDate: expirationTime,
+              };
+            })
           );
+        }),
+        tap((user) => {
           this.user = new User(
-            userData.localId,
-            userData.email,
-            userData.idToken,
-            expirationTime
+            user.userId,
+            user.email,
+            user.username,
+            user.token,
+            user.expirationDate
           );
         })
       );
@@ -84,5 +120,9 @@ export class AuthService {
 
   getUserEmail() {
     return this.user.email;
+  }
+
+  getUsername() {
+    return this.user.username;
   }
 }

@@ -9,6 +9,10 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  // TODO - izbaciti default vrednosti
+  defaultEmail: string = '3user@gmail.com';
+  defaultPassword: string = '3user123';
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {}

@@ -17,8 +17,6 @@ export class RegisterPage implements OnInit {
     private toastController: ToastController
   ) {}
 
-  // TODO za polje username:
-  // napraviti kolekciju users u realtime database-u gde ce se pratiti ostali podaci o useru
   ngOnInit() {
     this.registerForm = new FormGroup({
       username: new FormControl(null, Validators.required),
