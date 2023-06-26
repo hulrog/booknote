@@ -1,10 +1,6 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <ion-icon name="book-outline" class="logo-icon"> </ion-icon>
+  <ion-title class="logo-text">BOOKNOTE</ion-title>
   <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
     <ion-grid>
       <ion-row>
@@ -47,6 +43,16 @@
           <ion-button type="submit" color="primary" shape="round" expand="block"
             >Register</ion-button
           >
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <p class="ion-text-center">
+            Already have an account?
+            <ion-text color="primary" (click)="goToLogin()"
+              ><strong>Log in.</strong></ion-text
+            >
+          </p>
         </ion-col>
       </ion-row>
     </ion-grid>
