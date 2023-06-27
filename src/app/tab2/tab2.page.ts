@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from '../tab1/book.model';
 import { BooksService } from '../tab1/books.service';
 import { UsersService } from './users.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-tab2',
@@ -14,6 +15,7 @@ export class Tab2Page implements OnInit {
   searchTerm: string = '';
 
   constructor(
+    private authService: AuthService,
     private booksService: BooksService,
     private usersService: UsersService
   ) {}
@@ -50,5 +52,17 @@ export class Tab2Page implements OnInit {
 
   matchesSearchTerm(text: string): boolean {
     return text.toLowerCase().includes(this.searchTerm.toLowerCase());
+  }
+
+  likeBook(book: Book) {
+    const username = this.authService.getUsername();
+    const reader = { username: username, rating: 0 };
+    book.readers.push(reader);
+    this.booksService.updateBook(book).subscribe();
+  }
+
+  isReader(book: Book): boolean {
+    const username = this.authService.getUsername();
+    return book.readers.some((reader) => reader.username === username);
   }
 }

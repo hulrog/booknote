@@ -1,7 +1,7 @@
 <ion-content [fullscreen]="true">
   <ion-searchbar
     [(ngModel)]="searchTerm"
-    placeholder="Search users, books and authors"
+    placeholder="Search users, books or authors"
     (ionChange)="filterUsers()"
   ></ion-searchbar>
 
@@ -23,6 +23,12 @@
             >
               <span class="author">{{ book.author }}</span>
               <span class="title"> {{ book.title }}</span>
+              <ion-button
+                (click)="likeBook(book)"
+                size="small"
+                [disabled]="isReader(book)"
+                >Like</ion-button
+              >
             </div>
           </ng-container>
         </ng-container>
