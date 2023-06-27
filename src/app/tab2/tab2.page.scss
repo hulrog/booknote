@@ -1,0 +1,67 @@
+ion-card {
+  margin: 10px;
+  padding: 5px;
+  border-radius: 5px;
+
+  ion-item {
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+
+  .username {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  ion-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+
+.book {
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  .author {
+    font-size: 10px;
+  }
+  .title {
+    font-size: 14px;
+    margin-left: 10px;
+  }
+}
+
+.genre-history {
+  background-color: var(--color-history);
+}
+
+.genre-fantasy {
+  background-color: var(--color-fantasy);
+}
+
+.genre-horror {
+  background-color: var(--color-horror);
+}
+
+.genre-thriller {
+  background-color: var(--color-thriller);
+}
+
+.genre-nonfiction {
+  background-color: var(--color-nonfiction);
+}
+
+.genre-drama {
+  background-color: var(--color-drama);
+}
+
+.genre-comedy {
+  background-color: var(--color-comedy);
+}
