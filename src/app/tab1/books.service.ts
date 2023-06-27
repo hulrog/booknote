@@ -6,10 +6,16 @@ import { AuthService } from '../auth/auth.service';
 
 interface BookData {
   author: string;
+  comments: Comment[];
   genre: string;
   rating: number;
-  title: string;
   readers: Reader[];
+  title: string;
+}
+
+interface Comment {
+  username: string;
+  text: string;
 }
 
 interface Reader {
@@ -52,10 +58,11 @@ export class BooksService {
             books.concat({
               id: generatedId,
               author,
+              comments: [],
               genre,
               rating,
-              title,
               readers: [newReader],
+              title,
             })
           );
         })
@@ -74,12 +81,15 @@ export class BooksService {
             const book: Book = {
               id: key,
               author: booksData[key].author,
+              comments: booksData[key].comments
+                ? [...booksData[key].comments]
+                : [],
               genre: booksData[key].genre,
               rating: booksData[key].rating,
-              title: booksData[key].title,
               readers: booksData[key].readers
                 ? [...booksData[key].readers]
                 : [],
+              title: booksData[key].title,
             };
 
             if (book.readers.some((reader) => reader.username === username)) {
@@ -95,8 +105,15 @@ export class BooksService {
   }
 
   updateBook(book: Book) {
-    const { id, author, genre, rating, title, readers } = book;
-    const bookData: BookData = { author, genre, rating, title, readers };
+    const { id, author, comments, genre, rating, readers, title } = book;
+    const bookData: BookData = {
+      author,
+      comments,
+      genre,
+      rating,
+      readers,
+      title,
+    };
 
     return this.http.put(
       `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books/${id}.json?auth=${this.authService.getToken()}`,

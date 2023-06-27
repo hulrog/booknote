@@ -69,4 +69,39 @@
     color="danger"
     >Delete Book</ion-button
   >
+  <ion-item>
+    <ion-label position="stacked">Notes</ion-label>
+    <ion-textarea
+      [(ngModel)]="commentText"
+      placeholder="Enter comment"
+    ></ion-textarea>
+  </ion-item>
+
+  <ion-button (click)="addComment()" class="custom-button" shape="round"
+    >Add Comment</ion-button
+  >
+
+  <ion-card *ngFor="let comment of book.comments">
+    <ion-card-header>
+      <ion-item lines="none">
+        <ion-avatar slot="start" class="username-icon">
+          <ion-icon name="person-circle-outline" size="large"></ion-icon>
+        </ion-avatar>
+        <ion-label class="username">{{ comment.username }}:</ion-label>
+        <ion-buttons slot="end" *ngIf="comment.username == username">
+          <ion-button fill="clear" (click)="deleteComment(comment)">
+            <ion-icon name="trash" color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input
+        [(ngModel)]="comment.text"
+        class="comment-input"
+        (focusout)="editComment(comment)"
+        [readonly]="comment.username !== username"
+      ></ion-input>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

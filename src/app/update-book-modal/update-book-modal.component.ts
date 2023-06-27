@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { BooksService } from '../tab1/books.service';
-import { Book, Reader } from '../tab1/book.model';
+import { Book, Comment, Reader } from '../tab1/book.model';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
@@ -12,10 +12,12 @@ import { AuthService } from '../auth/auth.service';
 export class UpdateBookModalComponent {
   @Input() book!: Book;
   author: string = '';
+  commentText: string = '';
   genre: string = '';
   rating: number = 0;
   readerRating: number = 0;
   title: string = '';
+  username: string = '';
 
   constructor(
     private modalController: ModalController,
@@ -33,8 +35,9 @@ export class UpdateBookModalComponent {
     this.author = this.book.author;
     this.genre = this.book.genre;
     this.rating = this.book.rating;
-    this.title = this.book.title;
     this.readerRating = this.getReaderRating();
+    this.title = this.book.title;
+    this.username = this.authService.getUsername();
   }
 
   getReaderRating(): number {
@@ -126,5 +129,33 @@ export class UpdateBookModalComponent {
 
   selectReaderRating(rating: number): void {
     this.readerRating = rating;
+  }
+
+  // Komentari
+  addComment() {
+    const username = this.authService.getUsername();
+    const comment = { username: username, text: this.commentText };
+    this.book.comments.push(comment);
+    this.commentText = ''; // Clear the comment input field
+  }
+
+  editComment(comment: Comment) {
+    if (comment.username === this.authService.getUsername()) {
+      this.booksService.updateBook(this.book).subscribe(
+        () => {},
+        (error) => {
+          console.log('error');
+        }
+      );
+    }
+  }
+
+  deleteComment(comment: Comment) {
+    const index = this.book.comments.indexOf(comment);
+
+    if (index > -1) {
+      this.book.comments.splice(index, 1);
+      this.booksService.updateBook(this.book).subscribe();
+    }
   }
 }
