@@ -72,18 +72,40 @@ export class UpdateBookModalComponent {
 
   // Prosek se zaokruzuje na ceo broj da selektuje broj zvezdica
   calculateAverageRating(readers: Reader[]): number {
-    let totalRatings = 0;
+    let total = 0;
+    let numberOfRatings = 0;
     for (const reader of readers) {
-      totalRatings += reader.rating;
+      if (reader.rating != 0) {
+        total += reader.rating;
+        numberOfRatings++;
+      }
     }
-    const averageRating = Math.round(totalRatings / readers.length);
+
+    const averageRating = Math.round(total / numberOfRatings);
     return averageRating;
   }
 
   deleteBook() {
-    this.booksService.deleteBook(this.book.id).subscribe(() => {
-      this.dismissModal();
-    });
+    const username = this.authService.getUsername();
+    const readerIndex = this.book.readers.findIndex(
+      (reader) => reader.username === username
+    );
+
+    // Ako je jedini citac, brisi knjigu
+    if (this.book.readers.length === 1) {
+      this.booksService.deleteBook(this.book.id).subscribe(() => {
+        this.dismissModal();
+      });
+    } else {
+      // Nije jedini citac, samo joj izbrisi rating i updatuj u bazi sa novim prosekom
+      this.book.readers.splice(readerIndex, 1);
+      const averageRating = this.calculateAverageRating(this.book.readers);
+      this.book.rating = averageRating;
+
+      this.booksService.updateBook(this.book).subscribe(() => {
+        this.dismissModal();
+      });
+    }
   }
 
   // Iste funkcije kao u modalu za add,
