@@ -26,7 +26,7 @@ export class Tab3Page implements OnInit {
   }
 
   calculateBookStatistics() {
-    this.booksService.getBooks().subscribe((books: Book[]) => {
+    this.booksService.getBooks(this.username).subscribe((books: Book[]) => {
       this.totalBooks = books.length;
       const genreBreakdown: { genre: string; count: number }[] = [];
 

@@ -4,6 +4,7 @@ import { Book } from './book.model';
 import { ModalController } from '@ionic/angular';
 import { AddBookModalComponent } from '../add-book-modal/add-book-modal.component';
 import { UpdateBookModalComponent } from '../update-book-modal/update-book-modal.component';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-tab1',
@@ -16,6 +17,7 @@ export class Tab1Page implements OnInit {
   genre: string = '';
   rating: number = 1;
   title: string = '';
+  username: string = '';
 
   genreOptions: string[] = [
     'all',
@@ -31,11 +33,13 @@ export class Tab1Page implements OnInit {
 
   constructor(
     private booksService: BooksService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.booksService.getBooks().subscribe((books) => {
+    this.username = this.authService.getUsername();
+    this.booksService.getBooks(this.username).subscribe((books) => {
       this.books = books;
     });
   }
@@ -48,7 +52,7 @@ export class Tab1Page implements OnInit {
     });
 
     modal.onDidDismiss().then(() => {
-      this.booksService.getBooks().subscribe((books) => {
+      this.booksService.getBooks(this.username).subscribe((books) => {
         this.books = books;
       });
     });
@@ -66,7 +70,7 @@ export class Tab1Page implements OnInit {
     });
 
     modal.onDidDismiss().then(() => {
-      this.booksService.getBooks().subscribe((books) => {
+      this.booksService.getBooks(this.username).subscribe((books) => {
         this.books = books;
       });
     });
@@ -82,11 +86,11 @@ export class Tab1Page implements OnInit {
   // Filter po selektovanom zanru
   filterBooks() {
     if (this.selectedGenre != 'all') {
-      this.booksService.getBooks().subscribe((books) => {
+      this.booksService.getBooks(this.username).subscribe((books) => {
         this.books = books.filter((book) => book.genre === this.selectedGenre);
       });
     } else {
-      this.booksService.getBooks().subscribe((books) => {
+      this.booksService.getBooks(this.username).subscribe((books) => {
         this.books = books;
       });
     }

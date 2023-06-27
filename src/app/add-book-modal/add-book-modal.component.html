@@ -37,7 +37,7 @@
       *ngFor="let star of getStarsArray()"
       [name]="starIconName(star)"
       (click)="selectRating(star)"
-      class="star-icon"
+      class="star-icon-primary"
     ></ion-icon>
   </div>
   <ion-button (click)="addBook()" class="custom-button" shape="round"

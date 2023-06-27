@@ -4,8 +4,14 @@
   margin: 10px;
 }
 
-.star-icon {
+.star-icon-gold {
   margin: 10px;
-  font-size: 30px;
+  font-size: 40px;
   color: gold;
+}
+
+.star-icon-primary {
+  margin: 10px;
+  font-size: 40px;
+  color: var(--ion-color-primary);
 }

@@ -9,6 +9,12 @@ interface BookData {
   genre: string;
   rating: number;
   title: string;
+  readers: Reader[];
+}
+
+interface Reader {
+  username: string;
+  rating: number;
 }
 
 @Injectable({
@@ -22,23 +28,18 @@ export class BooksService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  getBook(id: string): Book {
-    return {
-      id: 'neki-id-123',
-      genre: 'Fantasy',
-      rating: 5,
-      author: 'J.R.R Tolkien',
-      title: 'Lor of the Rings',
-    };
-  }
-
   addBook(author: string, genre: string, rating: number, title: string) {
     let generatedId: string;
+    const username = this.authService.getUsername();
+    const newReader = {
+      username: username,
+      rating: rating,
+    };
 
     return this.http
       .post<{ name: string }>(
         `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books.json?auth=${this.authService.getToken()}`,
-        { author, genre, rating, title }
+        { author, genre, rating, title, readers: [newReader] }
       )
       .pipe(
         switchMap((resData) => {
@@ -54,13 +55,14 @@ export class BooksService {
               genre,
               rating,
               title,
+              readers: [newReader],
             })
           );
         })
       );
   }
 
-  getBooks() {
+  getBooks(username: string) {
     return this.http
       .get<{ [key: string]: BookData }>(
         `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books.json?auth=${this.authService.getToken()}`
@@ -69,13 +71,20 @@ export class BooksService {
         map((booksData) => {
           const books: Book[] = [];
           for (const key in booksData) {
-            books.push({
+            const book: Book = {
               id: key,
               author: booksData[key].author,
               genre: booksData[key].genre,
               rating: booksData[key].rating,
               title: booksData[key].title,
-            });
+              readers: booksData[key].readers
+                ? [...booksData[key].readers]
+                : [],
+            };
+
+            if (book.readers.some((reader) => reader.username === username)) {
+              books.push(book);
+            }
           }
           return books;
         }),
@@ -85,14 +94,9 @@ export class BooksService {
       );
   }
 
-  updateBook(
-    id: string,
-    author: string,
-    genre: string,
-    rating: number,
-    title: string
-  ) {
-    const bookData: BookData = { author, genre, rating, title };
+  updateBook(book: Book) {
+    const { id, author, genre, rating, title, readers } = book;
+    const bookData: BookData = { author, genre, rating, title, readers };
 
     return this.http.put(
       `https://booknote-mr-default-rtdb.europe-west1.firebasedatabase.app/books/${id}.json?auth=${this.authService.getToken()}`,

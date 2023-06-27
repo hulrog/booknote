@@ -40,14 +40,25 @@
     </ion-select>
   </ion-item>
 
+  <!-- Ukupna ocena knjige -->
   <div class="rating">
     <ion-icon
       *ngFor="let star of getStarsArray()"
-      [name]="starIconName(star)"
-      (click)="selectRating(star)"
-      class="star-icon"
+      [name]="starIconName(star, 'overall')"
+      class="star-icon-gold"
     ></ion-icon>
   </div>
+
+  <!-- Korisnikova ocena knjige -->
+  <div class="rating">
+    <ion-icon
+      *ngFor="let star of getStarsArray()"
+      [name]="starIconName(star, 'reader')"
+      (click)="selectReaderRating(star)"
+      class="star-icon-primary"
+    ></ion-icon>
+  </div>
+
   <ion-button (click)="updateBook()" class="custom-button" shape="round"
     >Update Book</ion-button
   >
