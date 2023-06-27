@@ -1,6 +1,12 @@
 <ion-content [fullscreen]="true">
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    placeholder="Search users, books and authors"
+    (ionChange)="filterUsers()"
+  ></ion-searchbar>
+
   <ion-list>
-    <ion-card *ngFor="let user of usersWithBooks">
+    <ion-card *ngFor="let user of filteredUsers">
       <ion-item>
         <ion-icon name="person-circle-outline" color="white"></ion-icon>
         <ion-label class="username"
@@ -8,16 +14,18 @@
         >
       </ion-item>
       <div class="container">
-        <ion-grid>
-          <ion-row>
-            <ion-col size="12" *ngFor="let book of user.books">
-              <div class="book" [ngClass]="'genre-' + book.genre">
-                <span class="author">{{ book.author }}</span>
-                <span class="title"> {{ book.title }}</span>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+        <ng-container *ngIf="user.books.length > 0">
+          <ng-container *ngFor="let book of user.books">
+            <div
+              class="book"
+              [ngClass]="'genre-' + book.genre"
+              *ngIf="matchesSearchTerm(book.title) || matchesSearchTerm(book.author)"
+            >
+              <span class="author">{{ book.author }}</span>
+              <span class="title"> {{ book.title }}</span>
+            </div>
+          </ng-container>
+        </ng-container>
       </div>
     </ion-card>
   </ion-list>
