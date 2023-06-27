@@ -26,7 +26,7 @@
               <ion-button
                 (click)="likeBook(book)"
                 size="small"
-                [disabled]="isReader(book)"
+                [disabled]="likedBooks.includes(book.id) || isReader(book)"
                 >Like</ion-button
               >
             </div>

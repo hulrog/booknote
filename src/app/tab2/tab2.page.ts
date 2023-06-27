@@ -9,10 +9,11 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
 })
-export class Tab2Page implements OnInit {
+export class Tab2Page {
   usersWithBooks: { username: string; books: Book[] }[] = [];
   filteredUsers: { username: string; books: Book[] }[] = [];
   searchTerm: string = '';
+  likedBooks: string[] = [];
 
   constructor(
     private authService: AuthService,
@@ -20,7 +21,15 @@ export class Tab2Page implements OnInit {
     private usersService: UsersService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.fetchUsersWithBooks();
+  }
+
+  ionViewDidLeave() {
+    this.clearUsersWithBooks();
+  }
+
+  fetchUsersWithBooks() {
     this.usersService.getUsers().subscribe((users) => {
       for (const user of users) {
         this.booksService.getBooks(user.username).subscribe((books) => {
@@ -30,6 +39,12 @@ export class Tab2Page implements OnInit {
         });
       }
     });
+  }
+
+  clearUsersWithBooks() {
+    this.usersWithBooks = [];
+    this.filteredUsers = [];
+    this.likedBooks = [];
   }
 
   sortUsersByBookCount() {
@@ -58,7 +73,15 @@ export class Tab2Page implements OnInit {
     const username = this.authService.getUsername();
     const reader = { username: username, rating: 0 };
     book.readers.push(reader);
-    this.booksService.updateBook(book).subscribe();
+    this.booksService.updateBook(book).subscribe(() => {
+      this.disableLikeButtons(book.id);
+    });
+  }
+
+  disableLikeButtons(bookId: string) {
+    if (!this.likedBooks.includes(bookId)) {
+      this.likedBooks.push(bookId);
+    }
   }
 
   isReader(book: Book): boolean {

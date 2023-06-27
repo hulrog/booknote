@@ -11,7 +11,7 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page {
   books: Book[] = [];
   author: string = '';
   genre: string = '';
@@ -37,7 +37,7 @@ export class Tab1Page implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.username = this.authService.getUsername();
     this.booksService.getBooks(this.username).subscribe((books) => {
       this.books = books;
