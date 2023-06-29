@@ -12,16 +12,32 @@
 <ion-content class="ion-text-center" padding>
   <ion-item>
     <ion-label position="stacked">Title</ion-label>
-    <ion-input [(ngModel)]="title"></ion-input>
+    <ion-input
+      [(ngModel)]="title"
+      placeholder="Enter title"
+      required
+      (input)="isTitleEmpty = false"
+    ></ion-input>
+    <ion-text color="danger" *ngIf="isTitleEmpty"
+      >Title cannot be empty</ion-text
+    >
   </ion-item>
   <ion-item>
     <ion-label position="stacked">Author</ion-label>
-    <ion-input [(ngModel)]="author"></ion-input>
+    <ion-input
+      [(ngModel)]="author"
+      placeholder="Enter author"
+      required
+      (input)="isAuthorEmpty = false"
+    ></ion-input>
+    <ion-text color="danger" *ngIf="isAuthorEmpty"
+      >Author cannot be empty</ion-text
+    >
   </ion-item>
 
   <ion-item>
     <ion-label position="stacked">Genre</ion-label>
-    <ion-select [(ngModel)]="genre">
+    <ion-select [(ngModel)]="genre" required (ionChange)="isGenreEmpty = false">
       <ion-select-option value="history">History</ion-select-option>
       <ion-select-option value="fantasy">Fantasy</ion-select-option>
       <ion-select-option value="horror">Horror</ion-select-option>
@@ -30,6 +46,9 @@
       <ion-select-option value="drama">Drama</ion-select-option>
       <ion-select-option value="comedy">Comedy</ion-select-option>
     </ion-select>
+    <ion-text color="danger" *ngIf="isGenreEmpty"
+      >Genre cannot be empty</ion-text
+    >
   </ion-item>
 
   <div class="rating">

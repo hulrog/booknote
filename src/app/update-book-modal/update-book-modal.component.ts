@@ -14,6 +14,10 @@ export class UpdateBookModalComponent {
   author: string = '';
   commentText: string = '';
   genre: string = '';
+  isAuthorEmpty: boolean = false;
+  isCommentEmpty: boolean = false;
+  isGenreEmpty: boolean = false;
+  isTitleEmpty: boolean = false;
   rating: number = 0;
   readerRating: number = 0;
   title: string = '';
@@ -49,6 +53,15 @@ export class UpdateBookModalComponent {
   }
 
   updateBook() {
+    if (this.author.trim().length === 0) this.isAuthorEmpty = true;
+    if (this.genre.trim().length === 0) this.isGenreEmpty = true;
+    if (this.title.trim().length === 0) this.isTitleEmpty = true;
+    if (this.isAuthorEmpty || this.isTitleEmpty) return;
+
+    this.isAuthorEmpty = false;
+    this.isGenreEmpty = false;
+    this.isTitleEmpty = false;
+
     this.book.author = this.author;
     this.book.genre = this.genre;
     this.book.title = this.title;
@@ -78,7 +91,7 @@ export class UpdateBookModalComponent {
     let total = 0;
     let numberOfRatings = 0;
     for (const reader of readers) {
-      if (reader.rating != 0) {
+      if (reader.rating !== 0) {
         total += reader.rating;
         numberOfRatings++;
       }
@@ -133,6 +146,12 @@ export class UpdateBookModalComponent {
 
   // Komentari
   addComment() {
+    if (this.commentText.trim().length === 0) {
+      this.isCommentEmpty = true;
+      return;
+    }
+    this.isCommentEmpty = false;
+
     const username = this.authService.getUsername();
     const comment = { username: username, text: this.commentText };
     this.book.comments.push(comment);

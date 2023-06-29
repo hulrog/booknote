@@ -16,7 +16,11 @@
       [(ngModel)]="title"
       placeholder="Enter title"
       required
+      (input)="isTitleEmpty = false"
     ></ion-input>
+    <ion-text color="danger" *ngIf="isTitleEmpty"
+      >Title cannot be empty</ion-text
+    >
   </ion-item>
   <ion-item>
     <ion-label position="stacked">Author</ion-label>
@@ -24,12 +28,16 @@
       [(ngModel)]="author"
       placeholder="Enter author"
       required
+      (input)="isAuthorEmpty = false"
     ></ion-input>
+    <ion-text color="danger" *ngIf="isAuthorEmpty"
+      >Author cannot be empty</ion-text
+    >
   </ion-item>
 
   <ion-item>
     <ion-label position="stacked">Genre</ion-label>
-    <ion-select [(ngModel)]="genre">
+    <ion-select [(ngModel)]="genre" required (ionChange)="isGenreEmpty = false">
       <ion-select-option value="history">History</ion-select-option>
       <ion-select-option value="fantasy">Fantasy</ion-select-option>
       <ion-select-option value="horror">Horror</ion-select-option>
@@ -38,6 +46,9 @@
       <ion-select-option value="drama">Drama</ion-select-option>
       <ion-select-option value="comedy">Comedy</ion-select-option>
     </ion-select>
+    <ion-text color="danger" *ngIf="isGenreEmpty"
+      >Genre cannot be empty</ion-text
+    >
   </ion-item>
 
   <!-- Ukupna ocena knjige -->
@@ -75,6 +86,7 @@
       [(ngModel)]="commentText"
       class="add-comment-input"
       placeholder="Enter comment"
+      (input)="isCommentEmpty = false"
     ></ion-input>
     <ion-button
       (click)="addComment()"
@@ -85,6 +97,9 @@
       <ion-icon name="send"></ion-icon>
     </ion-button>
   </div>
+  <ion-text color="danger" *ngIf="isCommentEmpty"
+    >Comment cannot be empty</ion-text
+  >
 
   <ion-card *ngFor="let comment of book.comments">
     <ion-card-header>

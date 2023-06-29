@@ -10,6 +10,10 @@ import { BooksService } from '../tab1/books.service';
 export class AddBookModalComponent {
   author: string = '';
   genre: string = '';
+  isAuthorEmpty: boolean = false;
+  isCommentEmpty: boolean = false;
+  isGenreEmpty: boolean = false;
+  isTitleEmpty: boolean = false;
   rating: number = 0;
   title: string = '';
 
@@ -23,6 +27,14 @@ export class AddBookModalComponent {
   }
 
   addBook() {
+    if (this.author.trim().length === 0) this.isAuthorEmpty = true;
+    if (this.genre.trim().length === 0) this.isGenreEmpty = true;
+    if (this.title.trim().length === 0) this.isTitleEmpty = true;
+    if (this.isAuthorEmpty || this.isTitleEmpty) return;
+
+    this.isAuthorEmpty = false;
+    this.isGenreEmpty = false;
+    this.isTitleEmpty = false;
     this.booksService
       .addBook(this.author, this.genre, this.rating, this.title)
       .subscribe(() => {
