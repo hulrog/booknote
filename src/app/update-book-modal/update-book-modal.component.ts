@@ -136,17 +136,13 @@ export class UpdateBookModalComponent {
     const username = this.authService.getUsername();
     const comment = { username: username, text: this.commentText };
     this.book.comments.push(comment);
+    this.booksService.updateBook(this.book).subscribe();
     this.commentText = ''; // Clear the comment input field
   }
 
   editComment(comment: Comment) {
     if (comment.username === this.authService.getUsername()) {
-      this.booksService.updateBook(this.book).subscribe(
-        () => {},
-        (error) => {
-          console.log('error');
-        }
-      );
+      this.booksService.updateBook(this.book).subscribe();
     }
   }
 

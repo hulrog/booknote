@@ -60,26 +60,31 @@
   </div>
 
   <ion-button (click)="updateBook()" class="custom-button" shape="round"
-    >Update Book</ion-button
-  >
+    >Update Book
+  </ion-button>
   <ion-button
     (click)="deleteBook()"
     class="custom-button"
     shape="round"
     color="danger"
-    >Delete Book</ion-button
-  >
-  <ion-item>
-    <ion-label position="stacked">Notes</ion-label>
-    <ion-textarea
-      [(ngModel)]="commentText"
-      placeholder="Enter comment"
-    ></ion-textarea>
-  </ion-item>
+    >Delete Book
+  </ion-button>
 
-  <ion-button (click)="addComment()" class="custom-button" shape="round"
-    >Add Comment</ion-button
-  >
+  <div class="add-comment-container">
+    <ion-input
+      [(ngModel)]="commentText"
+      class="add-comment-input"
+      placeholder="Enter comment"
+    ></ion-input>
+    <ion-button
+      (click)="addComment()"
+      class="add-comment-button"
+      shape="round"
+      color="primary"
+    >
+      <ion-icon name="send"></ion-icon>
+    </ion-button>
+  </div>
 
   <ion-card *ngFor="let comment of book.comments">
     <ion-card-header>
@@ -98,7 +103,8 @@
     <ion-card-content>
       <ion-input
         [(ngModel)]="comment.text"
-        class="comment-input"
+        [class.comment-input-own]="comment.username === username"
+        [class.comment-input]="comment.username !== username"
         (focusout)="editComment(comment)"
         [readonly]="comment.username !== username"
       ></ion-input>
