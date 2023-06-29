@@ -12,7 +12,8 @@ import { AuthService } from '../auth/auth.service';
 export class Tab2Page {
   usersWithBooks: { username: string; books: Book[] }[] = [];
   filteredUsers: { username: string; books: Book[] }[] = [];
-  searchTerm: string = '';
+  userSearchTerm: string = '';
+  bookSearchTerm: string = '';
   likedBooks: string[] = [];
 
   constructor(
@@ -51,22 +52,36 @@ export class Tab2Page {
     this.usersWithBooks.sort((a, b) => b.books.length - a.books.length);
   }
 
-  filterUsers() {
+  // Ova funkcije ne iskljucuje prikaz knjiga, samo prikaz korisnika koji nemaju knjige
+  // i takodje filtrira korisnike po korisnickom imenu tj. izbacuje ih iz niza ako nisu to
+  filterUsersAndBooks() {
+    const lowerCaseUserSearchTerm = this.userSearchTerm.toLowerCase();
+    const lowerCaseBookSearchTerm = this.bookSearchTerm.toLowerCase();
+
+    // Izbacuje iz niza korisnike koji nisu searchovani
     this.filteredUsers = this.usersWithBooks.filter((user) => {
-      const lowerCaseSearchTerm = this.searchTerm.toLowerCase();
-      return (
-        this.matchesSearchTerm(user.username) ||
-        user.books.some(
+      const matchesUser = user.username
+        .toLowerCase()
+        .includes(lowerCaseUserSearchTerm);
+
+      // Provera da li prikazani korisnici sadrze unetu knjigu
+      if (lowerCaseBookSearchTerm === '') {
+        return matchesUser;
+      } else {
+        const matchesBook = user.books.some(
           (book) =>
-            this.matchesSearchTerm(book.title) ||
-            this.matchesSearchTerm(book.author)
-        )
-      );
+            book.title.toLowerCase().includes(lowerCaseBookSearchTerm) ||
+            book.author.toLowerCase().includes(lowerCaseBookSearchTerm)
+        );
+
+        return matchesUser && matchesBook; // Ne prikazuje korisnike koji nemaju knjige
+      }
     });
   }
 
+  // Ova funkcija iskljucuje sam prikaz knjiga za one koji ne matchuju search
   matchesSearchTerm(text: string): boolean {
-    return text.toLowerCase().includes(this.searchTerm.toLowerCase());
+    return text.toLowerCase().includes(this.bookSearchTerm.toLowerCase());
   }
 
   likeBook(book: Book) {

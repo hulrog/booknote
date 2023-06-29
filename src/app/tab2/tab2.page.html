@@ -1,8 +1,14 @@
 <ion-content [fullscreen]="true">
   <ion-searchbar
-    [(ngModel)]="searchTerm"
-    placeholder="Search users, books or authors"
-    (ionChange)="filterUsers()"
+    [(ngModel)]="userSearchTerm"
+    placeholder="Search users"
+    (ionInput)="filterUsersAndBooks()"
+  ></ion-searchbar>
+
+  <ion-searchbar
+    [(ngModel)]="bookSearchTerm"
+    placeholder="Search books or authors"
+    (ionInput)="filterUsersAndBooks()"
   ></ion-searchbar>
 
   <ion-list>
